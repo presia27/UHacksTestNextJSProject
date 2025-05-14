@@ -15,19 +15,37 @@ def init_db():
     conn.commit()
     conn.close()
 
-@app.route('/', methods = ['GET'])
+
+@app.route('/', methods = ['GET', 'POST', 'REMOVE', 'PATCH'])
 def home(): 
+
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
 
-    cursor.execute('SELECT * FROM tasks')
+    if request.method == 'GET':
 
-    tasks = cursor.fetchall()
-    conn.close()
+        cursor.execute('SELECT * FROM tasks')
+        tasks = cursor.fetchall()
+        conn.close()
+        tasks_list = [dict(task) for task in tasks]
+        return jsonify({ 'data' : tasks_list })
+    
+    elif request.method == 'POST':
 
-    tasks_list = [dict(task) for task in tasks]
-    return jsonify({ 'data' : tasks_list })
+        # ADD A TASK TO THE DB
+        return jsonify({ 'status' : "Success" })
+
+    elif request.method == 'REMOVE':
+
+        # REMOVE A TASK FROM THE DB
+        return jsonify({ 'status' : "Success" })
+    
+    elif request.method == 'PATCH':
+
+        #change status of the id to complete
+        return jsonify({ 'status' : "Success" })
+
 
 if __name__ == '__main__': 
     init_db()
