@@ -12,6 +12,7 @@ def init_db():
         priority INTEGER,
         status BOOLEAN)
     ''')
+    cursor.execute('''INSERT INTO tasks (body, priority, status) VALUES ('Hello', 1, TRUE)''')
     conn.commit()
     conn.close()
 
