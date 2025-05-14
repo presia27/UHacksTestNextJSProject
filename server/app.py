@@ -51,12 +51,37 @@ def home():
     
     elif request.method == 'PATCH':
 
-        task_id = request.get_json().get('id')
-        new_status = request.get_json().get('status')
-        cursor.execute('UPDATE tasks SET status = ? WHERE id = ?', (new_status, task_id))
+        data = request.get_json()
+        task_id = data.get('id')
+
+        fields = []
+        vals = []
+
+        if 'status' in data:
+            fields.append('status = ?')
+            vals.append(data['status'])
+        if 'body' in data:
+            fields.append('body = ?')
+            vals.append(data['body'])
+        if 'priority' in data:
+            fields.append('priority = ?')
+            vals.append(data['priority'])
+
+        if not fields:
+            conn.close()
+            return jsonify({ 'error': 'No fields to update' }), 400
+        
+        vals.append(task_id)
+        
+        query = f"UPDATE tasks SET {', '.join(fields)} WHERE id = ?"
+        cursor.execute(query, vals)
         conn.commit()
+
+        cursor.execute('SELECT * FROM tasks WHERE id = ?', (task_id,))
+        updated_task = dict(cursor.fetchone())
         conn.close()
-        return jsonify({ 'status' : "Updated", "id": task_id, "status": new_status })
+        return jsonify({'message': 'Updated', 'task': updated_task})
+
 
 
 if __name__ == '__main__': 
