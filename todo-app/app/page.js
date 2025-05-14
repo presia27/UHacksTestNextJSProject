@@ -1,4 +1,4 @@
-
+import CardComponent from "@/components/cardComponent";
 
 const Main = () => {
     return(
@@ -23,12 +23,6 @@ const Main = () => {
     )
 }
 
-const CardComponent = () => {
-    return(
-        <div>
-            test
-        </div>
-    )
-}
+
 
 export default Main;

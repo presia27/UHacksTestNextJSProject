@@ -1,0 +1,8 @@
+.card {
+    border: 2px solid rgb(200, 200, 200);
+    background-color: rgb(244, 244, 244);
+    border-radius: 2px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 25px 1fr .25fr;
+}
