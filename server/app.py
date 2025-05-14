@@ -12,12 +12,11 @@ def init_db():
         priority INTEGER,
         status BOOLEAN)
     ''')
-    cursor.execute('''INSERT INTO tasks (body, priority, status) VALUES ('Hello', 1, TRUE)''')
     conn.commit()
     conn.close()
 
 
-@app.route('/', methods = ['GET', 'POST', 'REMOVE', 'PATCH'])
+@app.route('/', methods = ['GET', 'POST', 'DELETE', 'PATCH'])
 def home(): 
 
     conn = sqlite3.connect('database.db')
@@ -34,18 +33,30 @@ def home():
     
     elif request.method == 'POST':
 
-        # ADD A TASK TO THE DB
+        data = request.get_json()
+        task_text = data.get('body')
+        task_priority = data.get('priority')
+        cursor.execute('INSERT INTO tasks (body, priority, status) VALUES (?, ?, FALSE)', (task_text, task_priority))
+        conn.commit()
+        conn.close()
         return jsonify({ 'status' : "Success" })
 
-    elif request.method == 'REMOVE':
+    elif request.method == 'DELETE':
 
-        # REMOVE A TASK FROM THE DB
-        return jsonify({ 'status' : "Success" })
+        task_id = request.get_json().get('id')
+        cursor.execute('DELETE FROM tasks WHERE id = ?', (task_id, ))
+        conn.commit()
+        conn.close()
+        return jsonify({ 'status' : "Deleted", "id": task_id })
     
     elif request.method == 'PATCH':
 
-        #change status of the id to complete
-        return jsonify({ 'status' : "Success" })
+        task_id = request.get_json().get('id')
+        new_status = request.get_json().get('status')
+        cursor.execute('UPDATE tasks SET status = ? WHERE id = ?', (new_status, task_id))
+        conn.commit()
+        conn.close()
+        return jsonify({ 'status' : "Updated", "id": task_id, "status": new_status })
 
 
 if __name__ == '__main__': 
