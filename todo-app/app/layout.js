@@ -1,3 +1,5 @@
+import "./globals.css";
+
 export const metadata = {
     title: "To-Do App",
     description: "Keep track of you tasks!"
