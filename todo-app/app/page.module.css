@@ -1,0 +1,17 @@
+.mainHeader {
+    background-color: rgb(234, 234, 234);
+    padding: 8px;
+    text-align: center;
+}
+
+.mainHeader h1 {
+    font-weight: bold;
+    font-size: 36px;
+    color: rgb(24, 24, 24);
+}
+
+.cardArea {
+    margin: 16px auto;
+    width: 70%;
+    padding: 4px;
+}

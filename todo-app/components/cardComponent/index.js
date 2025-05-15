@@ -1,11 +1,11 @@
 import Style from './cardComponent.module.css'
 
-const CardComponent = () => {
+const CardComponent = ({name, priority}) => {
     return(
         <div className={Style.card}>
             <div><input type="checkbox" /></div>
-            <div>Name of task</div>
-            <div>Priority</div>
+            <div>{name}</div>
+            <div>{priority}</div>
         </div>
     )
 }
